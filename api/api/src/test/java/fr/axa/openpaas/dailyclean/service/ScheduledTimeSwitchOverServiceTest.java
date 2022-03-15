@@ -2,7 +2,7 @@ package fr.axa.openpaas.dailyclean.service;
 
 import fr.axa.openpaas.dailyclean.util.KubernetesUtils;
 import fr.axa.openpaas.dailyclean.util.MockedDateUtils;
-import io.fabric8.kubernetes.api.model.batch.CronJob;
+import io.fabric8.kubernetes.api.model.batch.v1beta1.CronJob;
 import io.fabric8.kubernetes.client.KubernetesClient;
 import io.fabric8.kubernetes.client.server.mock.KubernetesServer;
 import io.quarkus.test.junit.QuarkusTest;

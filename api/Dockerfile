@@ -55,8 +55,8 @@ RUN rm -r /var/cache/dnf && curl -fsSL https://git.centos.org/rpms/centos-repos/
     dnf -y clean all --enablerepo='*'
 
 ENV JAVA_VERSION java11
-ENV MANDREL_VERSION 21.0.0.0-Final
-ENV MANDREL_DOWNLOAD_SUM 85c5d39997e373fa488a1e5555a1040bebb98f307968f3614a002f75ebf678ff
+ENV MANDREL_VERSION 21.3.0.0-Final
+ENV MANDREL_DOWNLOAD_SUM 581744f6448464a8efd712ce04d4879d5c10910559d0d10dcbd56c03e06fea47
 
 WORKDIR ${APP_ROOT}
 
