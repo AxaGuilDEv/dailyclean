@@ -23,9 +23,15 @@ To test dailyclean on your local machine by using kubernetes with Docker Desktop
 
 ```
 git clone https://github.com/AxaGuilDEv/dailyclean.git
-cd dailyclean/demo
-kubectl create namespace license-preproduction
-kubectl config set-context --current --namespace=license-preproduction
+cd dailyclean
+git checkout demo/devnation
+cd demo
+# Create dailyclean serviceaccount
+kubectl apply -f dailyclean-serviceaccount.yml
+# Link your docker account to this service account in order to pull images
+oc secret link dailyclean docker --for=pull
+# Patch workspace deployment
+kubectl apply -f patch-workspace-deployment.yml
 # Install dailyclean for the default service account
 kubectl apply -f deployment-dailyclean.yml
 # Install three instances of kubernetes-bootcamp

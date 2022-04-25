@@ -1,0 +1,181 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  annotations:
+    controller.devfile.io/restricted-access: 'true'
+    deployment.kubernetes.io/revision: '2'
+  name: workspace89341f9f0dd04ae4
+  uid: 338069c1-0f4c-4b72-a520-1445f38da850
+  creationTimestamp: '2022-04-25T06:51:37Z'
+  generation: 10
+  namespace: gthomas59800-dev
+  ownerReferences:
+    - apiVersion: workspace.devfile.io/v1alpha2
+      kind: DevWorkspace
+      name: terminal-qj05d6
+      uid: 89341f9f-0dd0-4ae4-aec4-34f14a7886f2
+      controller: true
+      blockOwnerDeletion: true
+  labels:
+    controller.devfile.io/creator: 75140738-fd79-4b2e-80d7-1732cbb1f7e0
+    controller.devfile.io/devworkspace_id: workspace89341f9f0dd04ae4
+    controller.devfile.io/devworkspace_name: terminal-qj05d6
+    axa.com/dailyclean: "false"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      controller.devfile.io/devworkspace_id: workspace89341f9f0dd04ae4
+  template:
+    metadata:
+      name: workspace89341f9f0dd04ae4
+      namespace: gthomas59800-dev
+      creationTimestamp: null
+      labels:
+        controller.devfile.io/creator: 75140738-fd79-4b2e-80d7-1732cbb1f7e0
+        controller.devfile.io/devworkspace_id: workspace89341f9f0dd04ae4
+        controller.devfile.io/devworkspace_name: terminal-qj05d6
+      annotations:
+        controller.devfile.io/restricted-access: 'true'
+    spec:
+      restartPolicy: Always
+      serviceAccountName: workspace89341f9f0dd04ae4-sa
+      imagePullSecrets:
+        - name: workspace89341f9f0dd04ae4-sa-dockercfg-jnvpg
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 10
+      securityContext: {}
+      containers:
+        - resources:
+            limits:
+              cpu: 400m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          name: web-terminal-tooling
+          env:
+            - name: DEVWORKSPACE_COMPONENT_NAME
+              value: web-terminal-tooling
+            - name: DEVWORKSPACE_NAMESPACE
+              value: gthomas59800-dev
+            - name: DEVWORKSPACE_NAME
+              value: terminal-qj05d6
+            - name: DEVWORKSPACE_ID
+              value: workspace89341f9f0dd04ae4
+            - name: DEVWORKSPACE_CREATOR
+              value: 75140738-fd79-4b2e-80d7-1732cbb1f7e0
+            - name: DEVWORKSPACE_IDLE_TIMEOUT
+              value: 15m
+            - name: DEVWORKSPACE_METADATA
+              value: /devworkspace-metadata
+            - name: DEVWORKSPACE_FLATTENED_DEVFILE
+              value: /devworkspace-metadata/flattened.devworkspace.yaml
+            - name: DEVWORKSPACE_ORIGINAL_DEVFILE
+              value: /devworkspace-metadata/original.devworkspace.yaml
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: workspace-metadata
+              readOnly: true
+              mountPath: /devworkspace-metadata
+            - name: devworkspace-serving-cert-workspace89341f9f0dd04ae4-service
+              readOnly: true
+              mountPath: /var/serving-cert/
+          terminationMessagePolicy: File
+          image: >-
+            registry.redhat.io/web-terminal-tech-preview/web-terminal-tooling-rhel8@sha256:a3c0b20b51a8e3cf794d2d6363d3058ff25310a43ba5ccb65abf6d01ba10289b
+          args:
+            - tail
+            - '-f'
+            - /dev/null
+        - resources:
+            limits:
+              cpu: 400m
+              memory: 128Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          name: web-terminal-exec
+          command:
+            - /go/bin/che-machine-exec
+            - '--authenticated-user-id'
+            - $(DEVWORKSPACE_CREATOR)
+            - '--idle-timeout'
+            - $(DEVWORKSPACE_IDLE_TIMEOUT)
+            - '--pod-selector'
+            - controller.devfile.io/devworkspace_id=$(DEVWORKSPACE_ID)
+            - '--use-tls'
+            - '--use-bearer-token'
+          env:
+            - name: DEVWORKSPACE_COMPONENT_NAME
+              value: web-terminal-exec
+            - name: DEVWORKSPACE_NAMESPACE
+              value: gthomas59800-dev
+            - name: DEVWORKSPACE_NAME
+              value: terminal-qj05d6
+            - name: DEVWORKSPACE_ID
+              value: workspace89341f9f0dd04ae4
+            - name: DEVWORKSPACE_CREATOR
+              value: 75140738-fd79-4b2e-80d7-1732cbb1f7e0
+            - name: DEVWORKSPACE_IDLE_TIMEOUT
+              value: 15m
+            - name: DEVWORKSPACE_METADATA
+              value: /devworkspace-metadata
+            - name: DEVWORKSPACE_FLATTENED_DEVFILE
+              value: /devworkspace-metadata/flattened.devworkspace.yaml
+            - name: DEVWORKSPACE_ORIGINAL_DEVFILE
+              value: /devworkspace-metadata/original.devworkspace.yaml
+          ports:
+            - name: exec
+              containerPort: 4444
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: workspace-metadata
+              readOnly: true
+              mountPath: /devworkspace-metadata
+            - name: devworkspace-serving-cert-workspace89341f9f0dd04ae4-service
+              readOnly: true
+              mountPath: /var/serving-cert/
+          terminationMessagePolicy: File
+          image: >-
+            registry.redhat.io/web-terminal-tech-preview/web-terminal-exec-rhel8@sha256:f7d9a7d8bb5ec1113452755515e9ca67254c4a75a754230a3117404ef9fb92be
+      serviceAccount: workspace89341f9f0dd04ae4-sa
+      volumes:
+        - name: workspace-metadata
+          configMap:
+            name: workspace89341f9f0dd04ae4-metadata
+            defaultMode: 420
+            optional: true
+        - name: devworkspace-serving-cert-workspace89341f9f0dd04ae4-service
+          secret:
+            secretName: workspace89341f9f0dd04ae4-service
+            defaultMode: 420
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 10
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2022-04-25T06:51:43Z'
+      lastTransitionTime: '2022-04-25T06:51:38Z'
+      reason: NewReplicaSetAvailable
+      message: >-
+        ReplicaSet "workspace89341f9f0dd04ae4-7f7cd7db7b" has successfully
+        progressed.
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2022-04-25T10:43:09Z'
+      lastTransitionTime: '2022-04-25T10:43:09Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.

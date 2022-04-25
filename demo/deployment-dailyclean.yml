@@ -14,7 +14,7 @@ spec:
       labels:
         app: dailyclean-api
     spec:
-      serviceAccountName: default
+      serviceAccountName: dailyclean
       containers:
         - name: dailyclean-api
           image: axaguildev/dailyclean-api:latest
@@ -22,7 +22,7 @@ spec:
             - name: SERVICE_JOB_IMAGENAME
               value: axaguildev/dailyclean-job:latest
             - name: SERVICE_JOB_SERVICEACCOUNTNAME
-              value: default
+              value: dailyclean
           resources:
             limits:
               memory: "96Mi"
@@ -45,3 +45,18 @@ spec:
     - port: 8080
       targetPort: 8080
       nodePort: 30001
+---
+apiVersion: "route.openshift.io/v1"
+kind: Route
+metadata:
+  name: dailyclean
+spec:
+  host: ""
+  path: ""
+  port:
+    targetPort: 8080
+  tls: null
+  to:
+    kind: Service
+    name: dailyclean-api
+    weight: 100
